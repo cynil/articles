@@ -16,7 +16,7 @@
  
 举一个栗子：
 
-1. 我需要某个数据，比如就按照前面讲的，天气数据吧，于是我构造查询`url`。注意这里的`instruction`就是我们告诉服务器的“指令”。我们跟服务器说，我需要`province`为`hubei`，`city`为`wuhan`的地方的天气数据，但由于数据返回后我自己不能处理，所以你返回数据的时候自己处理好了，具体怎么处理，我已经写在名字叫做`instruction`的指令里面了。 
+__1.__ 我需要某个数据，比如就按照前面讲的，天气数据吧，于是我构造查询`url`。注意这里的`instruction`就是我们告诉服务器的“指令”。我们跟服务器说，我需要`province`为`hubei`，`city`为`wuhan`的地方的天气数据，但由于数据返回后我自己不能处理，所以你返回数据的时候自己处理好了，具体怎么处理，我已经写在名字叫做`instruction`的指令里面了。 
 
 ```javascript
 var script = document.createElement('script');
@@ -25,7 +25,7 @@ script.src = 'www.weather.fake/get/?province=hubei&city=wuhan&callback=instructi
 document.getElementsByTagName('head')[0].appendChild(script);
 ```
 
-2. 先写好 __指令__，即回调。
+__2.__ 先写好 __指令__，即回调。
 
 ```javascript
 function instruction(data){
@@ -33,7 +33,7 @@ function instruction(data){
 }
 ```
 
-3. `weather.fake`的服务器收到我的请求，从数据库里一找，找到了数据。一看，还有个指令，于是它就执行`instruction`指令。说起来很高级，实际上也就是把返回的数据包裹在`instruction`函数里面(`jsonp`的`p`，`padding`)。服务器于是返回这样一个东西：
+__3.__ `weather.fake`的服务器收到我的请求，从数据库里一找，找到了数据。一看，还有个指令，于是它就执行`instruction`指令。说起来很高级，实际上也就是把返回的数据包裹在`instruction`函数里面(`jsonp`的`p`，`padding`)。服务器于是返回这样一个东西：
 
 ```javascript
 //response.js
@@ -43,7 +43,7 @@ instruction({
 }) 
 ```
  
-4. 服务器端的`writeheader`设置和浏览器端的`accept`设置会保证返回的东西会被浏览器解释成一个`js`文件，于是我们事先写好的指令`instruction函数`就得到了执行，整个`jsonp`过程就完成了。
+__4.__ 服务器端的`writeheader`设置和浏览器端的`accept`设置会保证返回的东西会被浏览器解释成一个`js`文件，于是我们事先写好的指令`instruction函数`就得到了执行，整个`jsonp`过程就完成了。
  
 ### 三、需要注意的几点
  
@@ -72,4 +72,4 @@ $.ajax({
 })
 ```
 
-这样是能成功的，因为当发送`ajax`时，会自动带上用户在`www.blog.com`的`cookie`，而请求方法又合法，所以完全能取得`blog.com`服务器的信任，也就能不知不觉地删除用户在`blog.com`上写的文章。
+这样是可能成功的，因为当向`www.blog.com`发送`ajax`时，会自动带上用户在该网站的`cookie`，而请求方法又合法，所以如果服务器方面依赖`cookie`进行身份验证的话，这样能取得`blog.com`服务器的信任，也就能不知不觉地删除用户在`blog.com`上写的文章。
