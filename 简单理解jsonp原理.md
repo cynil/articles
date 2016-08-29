@@ -62,7 +62,7 @@ __4.__ 服务器端的`writeheader`设置和浏览器端的`accept`设置会保�
  
 举个栗子，某博客网站的删除文章功能`API`可能必须要用`delete`方法发送请求才能执行，这个时候攻击者如果只用`src`构造请求就无能为力了，但`ajax`却可以轻易模拟用户动作。这个时候禁止跨域就显得很重要了。
  
-假设我的攻击网站是`www.evil.com`。而一个允许CORS跨域传输`ajax`的博客网站是`www.blog.com`。该博客网站中，当用户点击了删除按钮时，就会向服务器发送'delete`请求。具体为：`www.blog.com/user/delete(?id=10000)` 。这个时候，假如用户访问我的`evil.com`网站，而我在我网站的脚本里写`ajax`：
+假设我的攻击网站是`www.evil.com`。而一个允许CORS跨域传输`ajax`的博客网站是`www.blog.com`。该博客网站中，当用户点击了删除按钮时，就会向服务器发送`delete`请求。具体为：`www.blog.com/user/delete(?id=10000)` 。这个时候，假如用户访问我的`evil.com`网站，而我在我网站的脚本里写`ajax`：
 
 ```javascript
 $.ajax({
