@@ -1,4 +1,3 @@
-# 从prototype到new
 这篇文章主要的目的是试图说清楚Javascript的原型继承机制，从9月开始写，断断续续，费心费力画了很多<del>精美的</del>图示，但是一不小心全删掉了，只好从新开始。
 
 继承是为了实现方法的复用，如何实现方法的复用呢？最容易想到的，就是：
@@ -26,7 +25,7 @@ function extend(optional, base){
 
 也可以简单图示为：
 
-![原型回溯机制示意图](http://placeholder.exp)
+![原型回溯机制示意图](http://i1.piimg.com/4851/1955da266d428cc5.png)
 
 这种对象扩展的方法十分清新，如果想要乙对象从甲对象扩展方法，只要直接把乙对象的`[[prototype]]`属性指向甲对象即可。也就是说，`prototype`机制是一种在对象层面上的方法复用实现方式，它的思想很简单。而在经典的类式继承语言中，实现继承需要创建父类，然后创建子类继承父类，再实例化子类。
 
@@ -56,7 +55,7 @@ artist.speak('I am an artist')
 
 `artist`对象由`Object.create(person)`创建而来，因此它内部的`[[prototype]]`指针就指向`person`，当我们查询它的`speak`属性时，在它本身上找不到，于是就自动到它的原型上去查询。整个过程可以图示如下：
 
-![person和artist的原型式继承](http://placeholder.exp)
+![person和artist的原型式继承](http://i1.piimg.com/4851/26abcfa8784c844c.png)
 
 这是一种轻量、简洁、易于理解的继承方式，我们可以随便创建新的`artist`对象，让它继承`person`，如果需要给所有的`artist`添加新的方法，只需在`person`添加就可立即生效。
 
@@ -109,15 +108,15 @@ console.log(vinci.speak())
 
 现在每次通过`genArtist`函数创建新的`artist`时，返回的对象既会生成它自己的独有属性，又会继承`person`的属性。因为新生成的对象的`[[prototype]]`指向了`person`对象。整个`genArtist`函数就是一个批量生产`artist`对象的__工厂__，这个过程可以图示如下：
 
-![artist工厂示意图](http://placeholder.exp)
+![artist工厂示意图](http://i1.piimg.com/4851/66ad74bb1dc6b3d3.png)
 
 至此我们已经创建了一个相当令人满意的纯`Javascript`式的对象生成方法：通过函数统一生成一类对象、生成的对象共享原型方法，如果我们愿意，还可以把`person`的`[[prototype]]`指向另一个对象，延长原型链。
 
 但是这个方法也有一个缺点，我们不能利用`instanceof`操作符来检测它属于哪一类，`instanceof`检测的原理是：
 
-> 如果一个函数的`prototype`指针和一个对象的`[[prototype]]`指针所指向的对象相同，则返回`true`。
+> 如果一个函数的`prototype`指针指向的对象和一个对象的原型链上的任何一个对象相同，则返回`true`。
 
-![instanceof的检测原理](http://placeholder.exp)
+![instanceof的检测原理](http://i1.piimg.com/4851/ca1b5fe9e9b5ddc6.png)
 
 工厂函数方法生成的对象的`[[prototype]]`被指定为一个其他对象，即`person`，并没有指向哪个函数的`prototype`，所以`instanceof`就不可用。那么我们最好来指定一下。（值得注意的是这里的__函数的`prototype`指针__，极易与__对象的`[[prototype]]`指针__混淆，前者是每个函数对象都带有的一个属性，作用是作为通过这个函数`new`出来的对象的[[prototype]]`指针的目标。）
 
